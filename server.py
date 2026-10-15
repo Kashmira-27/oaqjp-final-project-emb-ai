@@ -14,9 +14,12 @@ def index():
 
 @app.route("/emotionDetector")
 def detect_emotion():
-    """Analyze text and return the detected emotions."""
-    text_to_analyze = request.args.get("textToAnalyze")
+    """Analyze text and handle invalid or blank input."""
+    text_to_analyze = request.args.get("textToAnalyze", "")
     result = emotion_detector(text_to_analyze)
+
+    if result["dominant_emotion"] is None:
+        return "Invalid text! Please try again!"
 
     response = (
         f"For the given statement, the system response is "
